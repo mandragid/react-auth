@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 300px;
+  width: 500px;
+  margin: auto;
+  padding-bottom: 25px;
+  margin-top: 20px;
+  border-radius: 16px;
+  box-shadow: 8px 8px 16px black;
+}
+
+.form-container button {
+  width: 220px;
+  margin-top: 16px;
+  padding: 8px;
+  background-color: green;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+}
+.form-container input {
+  width: 200px;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 8px;
+}
+
+.navigation ul li {
+  list-style-type: none;
+}
+
+.navigation ul li a {
+  text-decoration: none;
+}
