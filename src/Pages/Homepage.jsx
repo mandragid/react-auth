@@ -1,12 +1,8 @@
+import Navigation from "../Components/Navigation";
 const Homepage = () => {
   return (
     <div class="navigation">
-      <ul>
-        <li>
-          <a href="/login">Login</a> <br />
-          <a href="/register">Register</a>
-        </li>
-      </ul>
+      <Navigation />
     </div>
   );
 };

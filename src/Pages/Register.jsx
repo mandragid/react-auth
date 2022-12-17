@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Register.css";
 import axios from "axios";
 import API from "../const/endpoint";
+import Navigation from "../Components/Navigation";
 
 const Register = () => {
   const [emailInput, setEmailinput] = useState("");
@@ -31,13 +32,7 @@ const Register = () => {
 
   return (
     <div class="navigation">
-      <ul>
-        <li>
-          <a href="/">Home</a> <br />
-          <a href="/login">Login</a> <br />
-          <a href="/register">Register</a>
-        </li>
-      </ul>
+      <Navigation />
       <div class="container">
         <div className="form-container">
           <h1>Register Admin</h1>
