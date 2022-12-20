@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Navigation = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -26,7 +26,8 @@ const Navigation = () => {
             <div>
               <button onClick={handleLogout}>logout</button> <br />
               <a href="/register">Register</a> <br />
-              <a href="/discovery">Discovery</a>
+              <a href="/discovery">Discovery</a> <br />
+              <Link to="/add-new-car">Add Car</Link>
             </div>
           ) : (
             <div>
