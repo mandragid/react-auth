@@ -60,6 +60,7 @@ const Login = () => {
         <div class="container">
           <div className="form-container">
             <h1>Login</h1>
+            <p>Please login first</p>
             <input onChange={handleLoginEmail} placeholder="Email"></input>{" "}
             <br />
             <input
