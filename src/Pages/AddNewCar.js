@@ -19,7 +19,7 @@ const AddNewCar = () => {
 
   const handleImage = (e) => {
     setImage(e.target.files[0]);
-    console.log(e.target.files[0]);
+    console.log(image);
   };
 
   //   const handleCreate = () => {

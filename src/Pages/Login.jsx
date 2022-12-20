@@ -26,6 +26,7 @@ const Login = () => {
       email: loginEmail,
       password: loginPassword,
     };
+
     axios
       .post(API.LOGIN, loginPayload)
       .then((res) => {

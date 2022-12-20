@@ -2,22 +2,21 @@ import { useEffect, useState } from "react";
 import Navigation from "../Components/Navigation";
 import "./Register.css";
 import axios from "axios";
+import API from "../const/endpoint";
 
 const Discovery = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        access_token: token,
+      },
+    };
 
     axios
-      .get(
-        "https://bootcamp-rent-cars.herokuapp.com/admin/v2/car?page=1&pageSize=10",
-        {
-          headers: {
-            access_token: token,
-          },
-        }
-      )
+      .get(API.GET_ADMIN_CAR, config)
       .then((res) => {
         setCars(res.data.cars);
         console.log(res.data);
