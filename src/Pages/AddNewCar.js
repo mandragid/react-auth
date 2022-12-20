@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import API from "../const/endpoint";
 
 const AddNewCar = () => {
   const [name, setName] = useState("");
@@ -22,22 +23,27 @@ const AddNewCar = () => {
     console.log(image);
   };
 
-  //   const handleCreate = () => {
-  //     useEffect(() => {
-  //       const token = localStorage.getItem("token");
+  const HandleCreate = () => {
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          access_token: token,
+        },
+      };
 
-  //       axios
-  //         .post("https://bootcamp-rent-cars.herokuapp.com/admin/car")
-  //         })
-  //         .then((res) => {
-  //           setCars(res.data.cars);
-  //           console.log(res.data);
-  //         })
-  //         .catch((error) => {
-  //           console.error(error);
-  //         });
-  //     }, []);
-  //   };
+      const form = new FormData();
+
+      axios
+        .post(API.POST_ADMIN_CAR, config)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }, []);
+  };
 
   return (
     <div>
@@ -47,7 +53,7 @@ const AddNewCar = () => {
       <button>
         <Link to="/discovery">Cancel</Link>
       </button>
-      {/* <button onClick={handleCreate}>Save</button> */}
+      <button onClick={HandleCreate}>Save</button>
     </div>
   );
 };
