@@ -3,11 +3,12 @@ import "./Register.css";
 import axios from "axios";
 import API from "../const/endpoint";
 import Navigation from "../Components/Navigation";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [emailInput, setEmailinput] = useState("");
   const [passwordInput, setPasswordinput] = useState("");
-
+  const navigate = useNavigate();
   const handleEmail = (e) => {
     setEmailinput(e.target.value);
     console.log(emailInput);
@@ -26,7 +27,9 @@ const Register = () => {
     };
     axios
       .post(API.REGISTER, payload)
-      .then((res) => console.log(res))
+      .then((res) => {
+        navigate("/login");
+      })
       .catch((err) => console.log(err.message));
   };
 

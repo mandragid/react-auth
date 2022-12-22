@@ -5,8 +5,9 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Discovery from "./Pages/Discovery";
 import ProtectedRoute from "./hoc/ProtectedRoute";
-import ProtectedRoutes from "./hoc/ProtectedRoutes";
+// import ProtectedRoutes from "./hoc/ProtectedRoutes";
 import AddNewCar from "./Pages/AddNewCar";
+import EditCar from "./Pages/EditCar";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/discovery" element={<Discovery />} />
           <Route path="/add-new-car" element={<AddNewCar />} />
+          <Route path="/edit-car/:id" element={<EditCar />} />
         </Route>
         {/* <Route
           path="/discovery"

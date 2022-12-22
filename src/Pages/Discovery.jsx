@@ -3,11 +3,16 @@ import Navigation from "../Components/Navigation";
 import "./Register.css";
 import axios from "axios";
 import API from "../const/endpoint";
+import { Link } from "react-router-dom";
 
 const Discovery = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -24,7 +29,29 @@ const Discovery = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  };
+
+  const handleDelete = (id) => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        access_token: token,
+      },
+    };
+
+    axios
+      .delete(
+        `https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`,
+        config
+      )
+      .then((res) => {
+        console.log("data berhasil dihapus");
+        getData();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   return (
     <div>
@@ -45,8 +72,10 @@ const Discovery = () => {
                 <div className="category">
                   <h3>{item.category}</h3>
                 </div>
-                <button>Delete</button>
-                <button>Edit</button>
+                <button onClick={() => handleDelete(item.id)}>Delete</button>
+                <Link to={`/edit-car/${item.id}`}>
+                  <button>Edit</button>
+                </Link>
               </div>
             </div>
           ))

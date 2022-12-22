@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API from "../const/endpoint";
 
@@ -7,10 +7,17 @@ const AddNewCar = () => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
+  const [price, setPrice] = useState("");
+  const navigate = useNavigate();
 
   const handleName = (e) => {
     setName(e.target.value);
     console.log(name);
+  };
+
+  const handlePrice = (e) => {
+    setPrice(e.target.value);
+    console.log(price);
   };
 
   const handleCategory = (e) => {
@@ -20,35 +27,40 @@ const AddNewCar = () => {
 
   const handleImage = (e) => {
     setImage(e.target.files[0]);
-    console.log(image);
+    console.log(e.target.files[0]);
   };
 
   const HandleCreate = () => {
-    useEffect(() => {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          access_token: token,
-        },
-      };
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        access_token: token,
+      },
+    };
 
-      const form = new FormData();
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("name", name);
+    formData.append("category", category);
+    formData.append("price", price);
+    formData.append("status", false);
 
-      axios
-        .post(API.POST_ADMIN_CAR, config)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, []);
+    axios
+      .post(API.POST_ADMIN_CAR, formData, config)
+      .then((res) => {
+        navigate("/discovery");
+        console.log("berhasil input");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <div>
       <input onChange={handleName} placeholder="Name" />
       <input onChange={handleCategory} placeholder="tipe mobil" />
+      <input onChange={handlePrice} placeholder="Harga" />
       <input onChange={handleImage} type="file" />
       <button>
         <Link to="/discovery">Cancel</Link>
