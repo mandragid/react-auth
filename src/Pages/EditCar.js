@@ -11,6 +11,7 @@ const EditCar = () => {
   const [carData, setCarData] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -36,7 +37,7 @@ const EditCar = () => {
     getData();
   }, []);
 
-  const getData = () => {
+  const getData = async () => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -44,45 +45,74 @@ const EditCar = () => {
       },
     };
 
-    axios
-      .get(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, config)
-      .then((res) => {
-        setCarData(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log("tidak dapat memuat");
-      });
+    try {
+      const res = await axios.get(
+        `https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`,
+        config
+      );
+      setCarData(res.data);
+    } catch (error) {
+      setErrorMessage(error.response.message);
+
+      // console.log(error.response);
+    }
+
+    // axios
+    //   .get(`https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`, config)
+    //   .then((res) => {
+    //     setCarData(res.data);
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log("tidak dapat memuat");
+    //   });
   };
 
-  const handleEdit = () => {
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        access_token: token,
-      },
-    };
+  const handleEdit = async () => {
+    if (!name.length) {
+      setErrorMessage("Please input car name first.");
+    } else if (!category.length) {
+      setErrorMessage("Please input category first.");
+    } else if (!price.length) {
+      setErrorMessage("Please input price first.");
+    } else {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          access_token: token,
+        },
+      };
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("name", name);
+      formData.append("category", category);
+      formData.append("price", price);
+      formData.append("status", false);
 
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("name", name);
-    formData.append("category", category);
-    formData.append("price", price);
-    formData.append("status", false);
+      try {
+        axios.put(
+          `https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`,
+          formData,
+          config
+        );
+      } catch (error) {
+        console.log(error.response);
+      }
+    }
 
-    axios
-      .put(
-        `https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`,
-        formData,
-        config
-      )
-      .then((res) => {
-        console.log("edit berhasil");
-        navigate("/discovery");
-      })
-      .catch((err) => {
-        console.log("gagal edit");
-      });
+    // axios
+    //   .put(
+    //     `https://bootcamp-rent-cars.herokuapp.com/admin/car/${id}`,
+    //     formData,
+    //     config
+    //   )
+    //   .then((res) => {
+    //     console.log("edit berhasil");
+    //     navigate("/discovery");
+    //   })
+    //   .catch((err) => {
+    //     console.log("gagal edit");
+    //   });
   };
 
   return (
@@ -103,6 +133,7 @@ const EditCar = () => {
             <Link to="/discovery">Cancel</Link>
           </button>
           <button onClick={handleEdit}>Save</button>
+          {!!errorMessage && <p>{errorMessage}</p>}
         </div>
       ) : null}
     </div>

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [emailInput, setEmailinput] = useState("");
   const [passwordInput, setPasswordinput] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
   const navigate = useNavigate();
   const handleEmail = (e) => {
     setEmailinput(e.target.value);
@@ -19,18 +20,47 @@ const Register = () => {
     console.log(passwordInput);
   };
 
-  const handleRegister = () => {
-    const payload = {
-      email: emailInput,
-      password: passwordInput,
-      role: "Admin",
-    };
-    axios
-      .post(API.REGISTER, payload)
-      .then((res) => {
+  const handleRegister = async () => {
+    if (!emailInput.length & !passwordInput.length) {
+      setErrorMessage("Please input your Login Credentials first.");
+    } else {
+      const payload = {
+        email: emailInput,
+        password: passwordInput,
+        role: "Admin",
+      };
+      try {
+        const res = await axios.post(API.REGISTER, payload);
         navigate("/login");
-      })
-      .catch((err) => console.log(err.message));
+        console.log(res.response);
+      } catch (error) {
+        if (
+          (error.response.data.errors[0].message =
+            "Validation isEmail on email failed")
+        ) {
+          setErrorMessage("Invalid Email");
+        } else {
+          setErrorMessage("password must be at least 6 characters");
+        }
+        console.log(error.response);
+        // setErrorMessage(error.response);
+      }
+    }
+
+    // const payload = {
+    //   email: emailInput,
+    //   password: passwordInput,
+    //   role: "Admin",
+    // };
+    // try {
+    // } catch (error) {}
+
+    // axios
+    //   .post(API.REGISTER, payload)
+    //   .then((res) => {
+    //     navigate("/login");
+    //   })
+    //   .catch((err) => console.log(err.message));
   };
 
   return (
@@ -43,6 +73,7 @@ const Register = () => {
           <input onChange={handlePassword} placeholder="Password"></input>{" "}
           <br />
           <button onClick={handleRegister}>Register</button>
+          {!!errorMessage && <p>{errorMessage}</p>}
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ const Login = () => {
   const [loginPassword, setLoginpassword] = useState("");
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleLoginEmail = (e) => {
     setLoginemail(e.target.value);
@@ -21,20 +22,33 @@ const Login = () => {
     console.log(loginPassword);
   };
 
-  const handleLogin = () => {
-    const loginPayload = {
-      email: loginEmail,
-      password: loginPassword,
-    };
-
-    axios
-      .post(API.LOGIN, loginPayload)
-      .then((res) => {
-        console.log(res);
+  const handleLogin = async () => {
+    if (!loginEmail.length & !loginPassword.length) {
+      setErrorMessage("Please input your Login Credentials first.");
+    } else {
+      const loginPayload = {
+        email: loginEmail,
+        password: loginPassword,
+      };
+      try {
+        const res = await axios.post(API.LOGIN, loginPayload);
+        // console.log(res);
         localStorage.setItem("token", res.data.access_token);
         navigate("/discovery");
-      })
-      .catch((err) => console.log(err.message));
+      } catch (error) {
+        console.log(error.response.data.message);
+        setErrorMessage(error.response.data.message);
+      }
+    }
+
+    // axios
+    //   .post(API.LOGIN, loginPayload)
+    //   .then((res) => {
+    //     console.log(res);
+    //     localStorage.setItem("token", res.data.access_token);
+    //     navigate("/discovery");
+    //   })
+    //   .catch((err) => console.log(err.message));
   };
 
   useEffect(() => {
@@ -70,6 +84,7 @@ const Login = () => {
             ></input>{" "}
             <br />
             <button onClick={handleLogin}>Login</button>
+            {!!errorMessage && <p>{errorMessage}</p>}
           </div>
         </div>
       )}

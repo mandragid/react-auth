@@ -9,6 +9,7 @@ const AddNewCar = () => {
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -30,30 +31,45 @@ const AddNewCar = () => {
     console.log(e.target.files[0]);
   };
 
-  const HandleCreate = () => {
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        access_token: token,
-      },
-    };
+  const HandleCreate = async () => {
+    if (!name.length) {
+      setErrorMessage("Please input car name first.");
+    } else if (!category.length) {
+      setErrorMessage("Please input category first.");
+    } else if (!price.length) {
+      setErrorMessage("Please input price first.");
+    } else {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          access_token: token,
+        },
+      };
 
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("name", name);
-    formData.append("category", category);
-    formData.append("price", price);
-    formData.append("status", false);
-
-    axios
-      .post(API.POST_ADMIN_CAR, formData, config)
-      .then((res) => {
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("name", name);
+      formData.append("category", category);
+      formData.append("price", price);
+      formData.append("status", false);
+      try {
+        const res = await axios.post(API.POST_ADMIN_CAR, formData, config);
         navigate("/discovery");
-        console.log("berhasil input");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      } catch (error) {
+        setErrorMessage(error.response.statusText);
+        console.log(error.response);
+      }
+    }
+
+    // axios
+    //   .post(API.POST_ADMIN_CAR, formData, config)
+    //   .then((res) => {
+    //     navigate("/discovery");
+    //     console.log("berhasil input");
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   return (
@@ -66,6 +82,7 @@ const AddNewCar = () => {
         <Link to="/discovery">Cancel</Link>
       </button>
       <button onClick={HandleCreate}>Save</button>
+      {!!errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 };
